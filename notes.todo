@@ -31,7 +31,11 @@ Backend:
     maybe gunDB
 
 Starting points:
-    [ ] render a canvas with a background image, and pan / zoom
+    [x] render a canvas
+        [x] render some shapes
+        [ ] dynamically size the canvas base on viewport (vh/vw)
+        [ ] set background image
+
     [ ] draw some shit on it (no multi-client)
     [ ] drag and drop some shit on it 
 

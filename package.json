@@ -25,5 +25,11 @@
     "tslib": "^2.3.1",
     "typescript": "^4.4.3"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@types/fabric": "^4.5.4",
+    "@types/p5": "^1.3.1",
+    "fabric": "^4.6.0",
+    "p5-svelte": "^2.2.2"
+  }
 }
