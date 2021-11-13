@@ -1,0 +1,49 @@
+https://www.figma.com/file/uQxkwOS0W4WxcQr7VgLfge/Untitled?node-id=0%3A1
+
+[ ] Undo / Rewind:
+    [ ] stack
+    [ ] remove the last point from the stack
+
+[ ] DB + Websockets (two-way real-time communication)
+    [ ] Firebase (google noSQL DB with built-in socket implementation)
+        [ ] all business logic is client-side
+    [ ] GunDB (open source firebase-like project)
+        [ ] similarly, all business logic client side. need to run own "relay server"
+    [ ] Your own DB + web service that sets up websockets
+        [ ] AnyDB + socket.io
+
+
+
+[ ] something to draw something on image
+    [ ] pan/zoom
+    [ ] drag and drop stuff (?)
+    
+    Use:
+        [ ] p5js
+        [ ] fabric.js
+
+Architecture:
+
+Front end in Svelte (Sveltekit)
+
+Backend:
+    Server with sockets
+    maybe gunDB
+
+Starting points:
+    [ ] render a canvas with a background image, and pan / zoom
+    [ ] draw some shit on it (no multi-client)
+    [ ] drag and drop some shit on it 
+
+    [ ] synchronize 2 clients
+        [ ] restore state/persist state
+
+[ ] Caution:
+    [ ] screen resolution
+    [ ] image resolution
+    [ ] drawing state restoration
+        [ ] (x, y) => canvas
+            [ ] how does this map? scale across screen sizes/image sizes
+
+    [ ] scale
+    [ ] transform
