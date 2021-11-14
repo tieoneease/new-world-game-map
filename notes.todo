@@ -33,8 +33,14 @@ Backend:
 Starting points:
     [x] render a canvas
         [x] render some shapes
-        [ ] dynamically size the canvas base on viewport (vh/vw)
-        [ ] set background image
+        [x] dynamically size the canvas base on viewport (vh/vw)
+        [x] set background image
+            [ ] populate markers on image
+            [ ] ensure:
+                [ ] scale
+                [ ] pan
+                [ ] resize
+            
 
     [ ] draw some shit on it (no multi-client)
     [ ] drag and drop some shit on it 
