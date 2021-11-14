@@ -179,20 +179,36 @@
 		_canvas = new fabric.Canvas(_canvasElement, {
 			fireRightClick: true,
 			fireMiddleClick: true,
-			stopContextMenu: true
+			stopContextMenu: true,
+			backgroundColor: '#F3F3F3'
 		});
 		initCanvas(_canvas);
 	});
 </script>
 
-<svelte:window on:resize={resizeCanvas(_canvas)} />
+<svelte:window on:resize={() => resizeCanvas(_canvas)} />
 
-<div id="canvas-wrapper" bind:this={_canvasWrapper}>
-	<canvas id="canvas" bind:this={_canvasElement} />
+<div class="container">
+	<div id="sidebar" />
+	<div id="canvas-wrapper" bind:this={_canvasWrapper}>
+		<canvas id="canvas" bind:this={_canvasElement} />
+	</div>
 </div>
 
 <style>
+	.container {
+		height: 100vh;
+		background-color: blue;
+		display: flex;
+	}
+
+	#sidebar {
+		min-width: 300px;
+		background-color: lightpink;
+	}
+
 	#canvas-wrapper {
+		flex-grow: 1;
 		background-color: peachpuff;
 	}
 </style>
