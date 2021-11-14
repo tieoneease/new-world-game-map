@@ -1,10 +1,77 @@
-<script>
+<script lang="ts">
 	import { fabric } from 'fabric';
 	import { onMount } from 'svelte';
 
 	let _canvasWrapper;
 	let _canvasElement;
 	let _canvas;
+
+	interface MarkerConfig {
+		name: Marker;
+		x: number;
+		y: number;
+		scaleWidth?: number;
+		scaleHeight?: number;
+	}
+
+	interface MapData {
+		mapImage: string;
+		markers: MarkerConfig[];
+	}
+
+	enum Territory {
+		Everfall
+	}
+
+	enum Marker {
+		PointA = 'marker_pointA.png',
+		PointB = 'marker_pointB.png',
+		PointC = 'marker_pointC.png',
+		Fort = 'marker_fort.png',
+		GateClosed = 'marker_gate_closed.png',
+		RallyPoint = 'marker_rallyPoint.png'
+	}
+
+	const MAP_DATA: Record<Territory, MapData> = {
+		[Territory.Everfall]: {
+			mapImage: 'fort_everfall.png',
+			markers: [
+				{
+					name: Marker.Fort,
+					x: 510,
+					y: 460
+				},
+				{
+					name: Marker.PointA,
+					x: 450,
+					y: 260,
+					scaleWidth: 40,
+					scaleHeight: 40
+				},
+				{
+					name: Marker.PointB,
+					x: 630,
+					y: 330,
+					scaleWidth: 40,
+					scaleHeight: 40
+				},
+				{
+					name: Marker.PointC,
+					x: 740,
+					y: 490,
+					scaleWidth: 40,
+					scaleHeight: 40
+				},
+				{
+					name: Marker.RallyPoint,
+					x: 710,
+					y: 210,
+					scaleWidth: 50,
+					scaleHeight: 50
+				}
+			]
+		}
+	};
 
 	function resizeCanvas(canvas) {
 		const ratio = canvas.getWidth() / canvas.getHeight();
@@ -18,26 +85,41 @@
 		canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
 	}
 
-	function initCanvas(canvas) {
+	function createImage(imageUrl: string, options: any = {}): Promise<fabric.Image> {
+		return new Promise((resolve, reject) => {
+			fabric.Image.fromURL(imageUrl, (image: fabric.Image, err: boolean) => {
+				if (err) return reject(err);
+				image.set(options);
+				resolve(image);
+			});
+		});
+	}
+
+	async function createTerritoryMap(territory: Territory) {
+		const mapData = MAP_DATA[territory];
+		let map = await createImage(mapData.mapImage, { selectable: false });
+
+		let markers: fabric.Image[] = await Promise.all(
+			mapData.markers.map(async (markerConfig): Promise<fabric.Image> => {
+				let marker = await createImage(markerConfig.name, { selectable: false });
+				marker.setPositionByOrigin(new fabric.Point(markerConfig.x, markerConfig.y), 'left', 'top');
+				if (markerConfig.scaleWidth) marker.scaleToWidth(markerConfig.scaleWidth);
+				if (markerConfig.scaleHeight) marker.scaleToHeight(markerConfig.scaleHeight);
+				return marker;
+			})
+		);
+
+		let group = new fabric.Group([map, ...markers], {});
+		group.set({ selectable: false });
+		return group;
+	}
+
+	async function initCanvas(canvas) {
 		resizeCanvas(canvas);
 
 		let mapSize = {};
-		let mapImg = fabric.Image.fromURL('fort_everfall.png', (image) => {
-			canvas.setZoom(1); // reset zoom so pan actions work as expected
-			let zoom = 1;
-			let vpw = canvas.width / zoom;
-			let vph = canvas.height / zoom;
-			let x = image.left - vpw / 2; // x is the location where the top left of the viewport should be
-			let y = image.top - vph / 2; // y idem
-			canvas.absolutePan({ x: x, y: y });
-			canvas.setZoom(zoom);
-			canvas.add(image);
-			image.set('selectable', false);
-			mapSize = image.getOriginalSize();
-
-			canvas.viewportCenterObjectH(image);
-			canvas.viewportCenterObjectV(image);
-		});
+		let mapGroup = await createTerritoryMap(Territory.Everfall);
+		canvas.add(mapGroup);
 
 		canvas.on('mouse:wheel', function (opt) {
 			const delta = opt.e.deltaY;
