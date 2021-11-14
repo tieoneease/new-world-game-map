@@ -146,9 +146,9 @@
 			 */
 		});
 
-		canvas.on('mouse:down', function (opt) {
-			const evt = opt.e;
-			if (evt.altKey === true || evt.button === 2) {
+		canvas.on('mouse:down', function (event) {
+			const evt = event.e;
+			if (evt.altKey === true || event.button === 2) {
 				this.isDragging = true;
 				this.selection = false;
 				this.lastPosX = evt.clientX;
@@ -178,7 +178,8 @@
 	onMount(() => {
 		_canvas = new fabric.Canvas(_canvasElement, {
 			fireRightClick: true,
-			fireMiddleClick: true
+			fireMiddleClick: true,
+			stopContextMenu: true
 		});
 		initCanvas(_canvas);
 	});
