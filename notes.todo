@@ -59,6 +59,8 @@ Starting points:
     [ ] transform
 
 
-[ ] Map Group
-    [ ] render points on map
-    [ ] pan and zoom as a group
+[x] Map Group
+    [x] render points on map
+    [x] pan and zoom as a group
+
+[ ] Drag and Drop Markers
