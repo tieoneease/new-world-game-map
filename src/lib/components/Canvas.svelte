@@ -2,9 +2,9 @@
 	import { fabric } from 'fabric';
 	import { onMount } from 'svelte';
 
-	let _canvasWrapper;
-	let _canvasElement;
-	let _canvas;
+	let _canvasWrapper: HTMLDivElement;
+	let _canvasElement: HTMLCanvasElement;
+	let _canvas: fabric.Canvas;
 
 	interface MarkerConfig {
 		name: Marker;
@@ -73,9 +73,9 @@
 		}
 	};
 
-	function resizeCanvas(canvas) {
-		const containerWidth = _canvasWrapper.clientWidth;
-		const containerHeight = _canvasWrapper.clientHeight;
+	function resizeCanvas(canvas, container) {
+		const containerWidth = container.clientWidth;
+		const containerHeight = container.clientHeight;
 
 		const scale = containerWidth / canvas.getWidth();
 		const zoom = canvas.getZoom() * scale;
@@ -113,8 +113,8 @@
 		return group;
 	}
 
-	async function initCanvas(canvas) {
-		resizeCanvas(canvas);
+	async function initCanvas(canvas, canvasWrapper) {
+		resizeCanvas(canvas, canvasWrapper);
 
 		let mapSize = {};
 		let mapGroup = await createTerritoryMap(Territory.Everfall);
@@ -182,11 +182,11 @@
 			stopContextMenu: true,
 			backgroundColor: '#F3F3F3'
 		});
-		initCanvas(_canvas);
+		initCanvas(_canvas, _canvasWrapper);
 	});
 </script>
 
-<svelte:window on:resize={() => resizeCanvas(_canvas)} />
+<svelte:window on:resize={() => resizeCanvas(_canvas, _canvasWrapper)} />
 
 <div id="canvas-wrapper" bind:this={_canvasWrapper}>
 	<canvas id="canvas" bind:this={_canvasElement} />

@@ -1,7 +1,9 @@
 <script lang="ts">
 </script>
 
-<div id="sidebar" />
+<div id="sidebar">
+	
+</div>
 
 <style>
 	#sidebar {
