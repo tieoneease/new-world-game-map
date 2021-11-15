@@ -113,14 +113,7 @@
 		return group;
 	}
 
-	async function initCanvas(canvas, canvasWrapper) {
-		resizeCanvas(canvas, canvasWrapper);
-
-		let mapSize = {};
-		let mapGroup = await createTerritoryMap(Territory.Everfall);
-		canvas.add(mapGroup);
-		canvas.centerObject(mapGroup);
-
+	function setupCanvasEventHandlers(canvas: fabric.Canvas) {
 		canvas.on('mouse:wheel', function (opt) {
 			const delta = opt.e.deltaY;
 			let zoom = canvas.getZoom();
@@ -173,6 +166,16 @@
 			this.isDragging = false;
 			this.selection = true;
 		});
+	}
+
+	async function initCanvas(canvas: fabric.Canvas, canvasWrapper: HTMLDivElement) {
+		resizeCanvas(canvas, canvasWrapper);
+
+		let mapSize = {};
+		let mapGroup = await createTerritoryMap(Territory.Everfall);
+		canvas.add(mapGroup);
+		canvas.centerObject(mapGroup);
+		setupCanvasEventHandlers(canvas);
 	}
 
 	onMount(() => {
