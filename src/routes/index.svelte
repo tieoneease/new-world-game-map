@@ -74,15 +74,14 @@
 	};
 
 	function resizeCanvas(canvas) {
-		const ratio = canvas.getWidth() / canvas.getHeight();
 		const containerWidth = _canvasWrapper.clientWidth;
 		const containerHeight = _canvasWrapper.clientHeight;
 
 		const scale = containerWidth / canvas.getWidth();
 		const zoom = canvas.getZoom() * scale;
-
-		canvas.setDimensions({ width: containerWidth, height: containerWidth / ratio });
-		canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+		canvas.setHeight(containerHeight);
+		canvas.setWidth(containerWidth);
+		canvas.renderAll();
 	}
 
 	function createImage(imageUrl: string, options: any = {}): Promise<fabric.Image> {
@@ -120,6 +119,7 @@
 		let mapSize = {};
 		let mapGroup = await createTerritoryMap(Territory.Everfall);
 		canvas.add(mapGroup);
+		canvas.centerObject(mapGroup);
 
 		canvas.on('mouse:wheel', function (opt) {
 			const delta = opt.e.deltaY;
@@ -189,7 +189,8 @@
 <svelte:window on:resize={() => resizeCanvas(_canvas)} />
 
 <div class="container">
-	<div id="sidebar" />
+<div id="sidebar">
+</div>
 	<div id="canvas-wrapper" bind:this={_canvasWrapper}>
 		<canvas id="canvas" bind:this={_canvasElement} />
 	</div>
