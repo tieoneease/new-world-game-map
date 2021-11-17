@@ -1,10 +1,17 @@
 <script lang="ts">
 	export let send;
 	export let context;
+
+	let group;
+
+	function dragStart(e) {
+		console.log('dragging...')
+		e.dataTransfer.setData('text/plain', 'butt');
+	}
 </script>
 
 <div id="sidebar">
-	<div class="group">
+	<div bind:this={group} class="group" draggable="true" on:dragstart={dragStart}>
 		<img alt="healer" class="ui avatar image" src="marker_healer.png" />
 		<span>Healer</span>
 	</div>

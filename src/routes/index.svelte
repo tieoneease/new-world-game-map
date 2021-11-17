@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Sidebar, Canvas } from '$lib/components';
+	import { useMachine } from '@xstate/svelte';
 </script>
 
 <div class="container">

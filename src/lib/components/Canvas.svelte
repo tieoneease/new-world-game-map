@@ -166,6 +166,14 @@
 			this.isDragging = false;
 			this.selection = true;
 		});
+
+		canvas.on('dragenter', function (event) {
+			console.log('drag enter');
+		});
+
+		canvas.on('drop', function (event) {
+			console.log('drop');
+		});
 	}
 
 	async function initCanvas(canvas: fabric.Canvas, canvasWrapper: HTMLDivElement) {
