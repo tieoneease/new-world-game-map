@@ -205,6 +205,10 @@
 		canvas.add(mapGroup);
 		canvas.centerObject(mapGroup);
 		setupCanvasEventHandlers(canvas);
+		canvas.zoomToPoint(
+			new fabric.Point(canvas.width / 2, canvas.height / 2),
+			canvas.height / mapGroup.height
+		);
 		canvas.renderAll();
 	}
 
