@@ -7,7 +7,7 @@
 		label: string;
 	}
 
-	let dragImage;
+	let dragImage: HTMLImageElement;
 	const dispatch = createEventDispatcher();
 	function dragStart(event) {
 		event.dataTransfer.setDragImage(dragImage, dragImage.clientWidth, dragImage.clientHeight);
@@ -25,7 +25,11 @@
 		color: black;
 	}
 
+	.item:hover > img {
+		filter: brightness(10%);
+	}
+
 	img {
-		filter: opacity(1);
+		filter: brightness(70%);
 	}
 </style>
