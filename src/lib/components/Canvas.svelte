@@ -1,4 +1,7 @@
 <script lang="ts">
+	export let state;
+	export let send;
+
 	import { fabric } from 'fabric';
 	import { onMount } from 'svelte';
 
@@ -168,11 +171,14 @@
 		});
 
 		canvas.on('dragenter', function (event) {
-			console.log('drag enter');
+			if ($state.value === 'dragging') {
+				console.log($state.context.item, 'dragenter');
+			}
 		});
 
 		canvas.on('drop', function (event) {
-			console.log('drop');
+			console.log($state.context.item, 'dropped');
+			send({ type: 'DROP' });
 		});
 	}
 

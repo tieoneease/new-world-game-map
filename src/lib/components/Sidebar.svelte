@@ -1,12 +1,12 @@
 <script lang="ts">
+	export let state;
 	export let send;
-	export let context;
 
 	let group;
-
 	function dragStart(e) {
-		console.log('dragging...')
-		e.dataTransfer.setData('text/plain', 'butt');
+		if ($state.value === 'idle') {
+			send({ type: 'DRAG_START', item: e.target })
+		}
 	}
 </script>
 
