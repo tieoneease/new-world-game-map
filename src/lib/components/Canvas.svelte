@@ -77,13 +77,15 @@
 	};
 
 	function resizeCanvas(canvas, container) {
-		const containerWidth = container.clientWidth;
-		const containerHeight = container.clientHeight;
+		const containerWidth = window.innerWidth;
+		const containerHeight = window.innerHeight;
+
+		const boundingLength = Math.min(containerWidth, containerHeight);
 
 		const scale = containerWidth / canvas.getWidth();
 		const zoom = canvas.getZoom() * scale;
-		canvas.setHeight(containerWidth);
-		canvas.setWidth(containerWidth);
+		canvas.setHeight(boundingLength);
+		canvas.setWidth(boundingLength);
 		canvas.renderAll();
 	}
 
@@ -181,18 +183,14 @@
 			fabric.Image.fromURL($state.context.item.imageUrl, (image: fabric.Image, err: boolean) => {
 				if (err) console.error(err);
 
-				const offsetX = image.width / 2;
-				const offsetY = image.height / 2;
-				const left = x - offsetX;
-				const top = y - offsetY;
+				const point = fabric.util.transformPoint(new fabric.Point(x, y), canvas.viewportTransform);
 
 				image.set({
-					left,
-					top,
 					centeredScaling: true,
 					hasControls: false,
 					hasBorders: false
 				});
+				image.setPositionByOrigin(point, 'center', 'center');
 				canvas.add(image);
 			});
 			send({ type: 'DROP' });
@@ -223,13 +221,7 @@
 
 <svelte:window on:resize={() => resizeCanvas(_canvas, _canvasWrapper)} />
 
-<div id="canvas-wrapper" bind:this={_canvasWrapper}>
-	<canvas id="canvas" bind:this={_canvasElement} />
-</div>
+<canvas id="canvas" bind:this={_canvasElement} />
 
 <style>
-	#canvas-wrapper {
-		flex-grow: 1;
-		background-color: peachpuff;
-	}
 </style>

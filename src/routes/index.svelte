@@ -9,7 +9,7 @@
 	const { state, send } = useMachine(dragDropMachine);
 </script>
 
-<div class="html container">
+<div class="html">
 	<Sidebar {state} {send} />
 	<Canvas {state} {send} />
 </div>
@@ -18,5 +18,6 @@
 	div {
 		height: 100vh;
 		display: flex;
+		justify-content: center;
 	}
 </style>
