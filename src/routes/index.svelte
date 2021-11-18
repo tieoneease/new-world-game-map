@@ -2,23 +2,21 @@
 	import { Sidebar, Canvas } from '$lib/components';
 	import { createMachine } from 'xstate';
 	import { useMachine } from '@xstate/svelte';
+	import { onMount, setContext } from 'svelte';
 
-	import { dragDropMachine } from '$lib/machines/dragDropMachine';
+	import { dragDropMachine, key as dragDropKey } from '$lib/machines/dragDropMachine';
 
 	const { state, send } = useMachine(dragDropMachine);
-
-	import GUN from 'gun';
 </script>
 
-<div class="container">
+<div>
 	<Sidebar {state} {send} />
 	<Canvas {state} {send} />
 </div>
 
 <style>
-	.container {
+	div {
 		height: 100vh;
-		background-color: blue;
 		display: flex;
 	}
 </style>

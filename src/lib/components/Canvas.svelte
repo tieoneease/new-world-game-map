@@ -172,12 +172,11 @@
 
 		canvas.on('dragenter', function (event) {
 			if ($state.value === 'dragging') {
-				console.log($state.context.item, 'dragenter');
+				console.log($state.context.item);
 			}
 		});
 
 		canvas.on('drop', function (event) {
-			console.log($state.context.item, 'dropped');
 			send({ type: 'DROP' });
 		});
 	}

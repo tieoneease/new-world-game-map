@@ -1,5 +1,7 @@
 import { createMachine, assign } from 'xstate';
 
+export const key = {};
+
 export const dragDropMachine = createMachine({
 	id: 'drag-drop',
 	initial: 'idle',
