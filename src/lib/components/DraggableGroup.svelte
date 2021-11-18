@@ -11,7 +11,7 @@
 	const dispatch = createEventDispatcher();
 	function dragStart(event) {
 		event.dataTransfer.setDragImage(dragImage, dragImage.clientWidth, dragImage.clientHeight);
-		dispatch('dragged', config.label);
+		dispatch('dragged', config);
 	}
 </script>
 

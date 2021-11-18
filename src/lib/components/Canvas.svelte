@@ -82,7 +82,7 @@
 
 		const scale = containerWidth / canvas.getWidth();
 		const zoom = canvas.getZoom() * scale;
-		canvas.setHeight(containerHeight);
+		canvas.setHeight(containerWidth);
 		canvas.setWidth(containerWidth);
 		canvas.renderAll();
 	}
@@ -172,11 +172,23 @@
 
 		canvas.on('dragenter', function (event) {
 			if ($state.value === 'dragging') {
-				console.log($state.context.item);
 			}
 		});
 
 		canvas.on('drop', function (event) {
+			fabric.Image.fromURL(
+				$state.context.item.imageUrl,
+				(image: fabric.Image, err: boolean) => {
+					if (err) console.error(err);
+					image.hasControls = false;
+					image.hasBorders = false;
+					canvas.add(image);
+				},
+				{
+					top: event.e.clientX,
+					left: event.e.clientY
+				}
+			);
 			send({ type: 'DROP' });
 		});
 	}

@@ -47,6 +47,5 @@
 
 <style>
 	#sidebar {
-		min-width: 300px;
 	}
 </style>
