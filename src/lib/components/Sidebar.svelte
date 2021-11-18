@@ -4,9 +4,11 @@
 
 	import { DraggableGroup } from '$lib/components';
 
-	function dragStart(e) {
+	const dragImageMap = new Map<string, HTMLImageElement>();
+
+	function dragged(e) {
 		if ($state.value === 'idle') {
-			send({ type: 'DRAG_START', item: e.target });
+			send({ type: 'DRAG_START', item: e.detail });
 		}
 	}
 
@@ -23,12 +25,12 @@
 	];
 </script>
 
-<div id="sidebar" class="ui stacked segment vertical menu">
+<div id="sidebar" class="ui left fixed vertical menu">
 	<div class="item">
 		<div class="header">Groups</div>
 		<div class="menu">
 			{#each groups as config}
-				<DraggableGroup on:dragstart={dragStart} {config} />
+				<DraggableGroup on:dragged={dragged} {config} />
 			{/each}
 		</div>
 	</div>
@@ -37,7 +39,7 @@
 		<div class="header">Units</div>
 		<div class="menu">
 			{#each units as config}
-				<DraggableGroup on:dragstart={dragStart} {config} />
+				<DraggableGroup on:dragged={dragged} {config} />
 			{/each}
 		</div>
 	</div>
@@ -45,6 +47,6 @@
 
 <style>
 	#sidebar {
-		min-width: 500px;
+		min-width: 300px;
 	}
 </style>
