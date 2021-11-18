@@ -176,19 +176,25 @@
 		});
 
 		canvas.on('drop', function (event) {
-			fabric.Image.fromURL(
-				$state.context.item.imageUrl,
-				(image: fabric.Image, err: boolean) => {
-					if (err) console.error(err);
-					image.hasControls = false;
-					image.hasBorders = false;
-					canvas.add(image);
-				},
-				{
-					top: event.e.clientX,
-					left: event.e.clientY
-				}
-			);
+			const x = event.e.offsetX;
+			const y = event.e.offsetY;
+			fabric.Image.fromURL($state.context.item.imageUrl, (image: fabric.Image, err: boolean) => {
+				if (err) console.error(err);
+
+				const offsetX = image.width / 2;
+				const offsetY = image.height / 2;
+				const left = x - offsetX;
+				const top = y - offsetY;
+
+				image.set({
+					left,
+					top,
+					centeredScaling: true,
+					hasControls: false,
+					hasBorders: false
+				});
+				canvas.add(image);
+			});
 			send({ type: 'DROP' });
 		});
 	}
@@ -201,6 +207,7 @@
 		canvas.add(mapGroup);
 		canvas.centerObject(mapGroup);
 		setupCanvasEventHandlers(canvas);
+		canvas.renderAll();
 	}
 
 	onMount(() => {
