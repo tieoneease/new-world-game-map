@@ -169,14 +169,16 @@
 			fabric.Image.fromURL($state.context.item.imageUrl, (image: fabric.Image, err: boolean) => {
 				if (err) console.error(err);
 
-				const point = fabric.util.transformPoint(new fabric.Point(x, y), canvas.viewportTransform);
+				const point = new fabric.Point(x, y);
+				const invTrans = fabric.util.invertTransform(canvas.viewportTransform);
+				const newPoint = fabric.util.transformPoint(point, invTrans);
 
 				image.set({
 					centeredScaling: true,
 					hasControls: false,
 					hasBorders: false
 				});
-				image.setPositionByOrigin(point, 'center', 'center');
+				image.setPositionByOrigin(newPoint, 'center', 'center');
 				canvas.add(image);
 			});
 			send({ type: 'DROP' });
