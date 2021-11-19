@@ -128,20 +128,6 @@
 			canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
 			opt.e.preventDefault();
 			opt.e.stopPropagation();
-
-			/*
-			const vpt = this.viewportTransform;
-			if (vpt[4] >= 0) {
-				this.viewportTransform[4] = 0;
-			} else if (vpt[4] < canvas.getWidth() - mapSize.width * zoom) {
-				this.viewportTransform[4] = canvas.getWidth() - mapSize.width * zoom;
-			}
-			if (vpt[5] >= 0) {
-				this.viewportTransform[5] = 0;
-			} else if (vpt[5] < canvas.getHeight() - mapSize.height * zoom) {
-				this.viewportTransform[5] = canvas.getHeight() - mapSize.height * zoom;
-			}
-			 */
 		});
 
 		canvas.on('mouse:down', function (event) {
@@ -200,7 +186,6 @@
 	async function initCanvas(canvas: fabric.Canvas, canvasWrapper: HTMLDivElement) {
 		resizeCanvas(canvas, canvasWrapper);
 
-		let mapSize = {};
 		let mapGroup = await createTerritoryMap(Territory.Everfall);
 		canvas.add(mapGroup);
 		canvas.centerObject(mapGroup);
