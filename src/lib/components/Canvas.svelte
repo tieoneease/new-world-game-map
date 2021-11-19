@@ -181,11 +181,12 @@
 				image.setPositionByOrigin(newPoint, 'center', 'center');
 				canvas.add(image);
 			});
-			send({ type: 'DROP' });
+			send({ type: 'DROP', e: event });
 		});
 	}
 
 	async function initCanvas(canvas: fabric.Canvas, canvasWrapper: HTMLDivElement) {
+		send({ type: 'ASSIGN_CANVAS', canvas });
 		resizeCanvas(canvas, canvasWrapper);
 
 		let mapGroup = await createTerritoryMap(Territory.Everfall);
@@ -212,7 +213,9 @@
 
 <svelte:window on:resize={() => resizeCanvas(_canvas, _canvasWrapper)} />
 
-<canvas id="canvas" bind:this={_canvasElement} />
+<div>
+	<canvas id="canvas" bind:this={_canvasElement} />
+</div>
 
 <style>
 </style>
