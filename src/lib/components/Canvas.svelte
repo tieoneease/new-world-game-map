@@ -113,9 +113,9 @@
 			})
 		);
 
-		let group = new fabric.Group([map, ...markers], {});
-		group.set({ selectable: false });
-		return group;
+		return new fabric.Group([map, ...markers], {
+			selectable: false
+		});
 	}
 
 	function setupCanvasEventHandlers(canvas: fabric.Canvas) {
@@ -132,7 +132,7 @@
 
 		canvas.on('mouse:down', function (event) {
 			const evt = event.e;
-			if (evt.altKey === true || event.button === 2) {
+			if (evt.altKey || event.button === 2 || evt.metaKey) {
 				this.isDragging = true;
 				this.selection = false;
 				this.lastPosX = evt.clientX;

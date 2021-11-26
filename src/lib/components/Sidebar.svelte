@@ -23,6 +23,8 @@
 		{ imageUrl: 'marker_healer.png', label: 'Healer' },
 		{ imageUrl: 'marker_hammer.png', label: 'Hammer' }
 	];
+
+	let cereal = {};
 </script>
 
 <div id="sidebar" class="ui left fixed vertical menu">
@@ -41,6 +43,28 @@
 			{#each units as config}
 				<DraggableGroup on:dragged={dragged} {config} />
 			{/each}
+		</div>
+	</div>
+
+	<div class="item">
+		<div class="header">Cereal</div>
+		<div class="menu">
+			<button
+				on:click={() => {
+					cereal = JSON.stringify($state.context.canvas);
+					console.log(cereal, null, 2);
+					localStorage.setItem('map', cereal);
+				}}
+				class="ui button">Serialize</button
+			>
+			<button
+				on:click={() => {
+					cereal = localStorage.getItem('map');
+					console.log(cereal, null, 2);
+					$state.context.canvas.loadFromJSON(cereal);
+				}}
+				class="ui button">Deserialize</button
+			>
 		</div>
 	</div>
 </div>
