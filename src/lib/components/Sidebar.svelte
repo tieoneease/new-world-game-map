@@ -2,7 +2,12 @@
 	export let state;
 	export let send;
 
+	import { onMount, getContext } from 'svelte';
+	import { key as dbKey } from '$lib/db/gun';
 	import { DraggableGroup } from '$lib/components';
+
+	const { getDb } = getContext(dbKey);
+	const db = getDb();
 
 	function dragged(e) {
 		if ($state.value === 'idle') {
@@ -50,16 +55,16 @@
 			<button
 				on:click={() => {
 					cereal = JSON.stringify($state.context.canvas.toJSON(['selectable']));
-					console.log(cereal, null, 2);
-					localStorage.setItem('map', cereal);
+					db.get('dummymap').put({ map: cereal });
 				}}
 				class="ui button">Serialize</button
 			>
 			<button
 				on:click={() => {
-					cereal = localStorage.getItem('map');
-					console.log(cereal, null, 2);
-					$state.context.canvas.loadFromJSON(cereal);
+					db.get('dummymap').once((object) => {
+						cereal = object.map;
+						$state.context.canvas.loadFromJSON(cereal);
+					});
 				}}
 				class="ui button">Deserialize</button
 			>
