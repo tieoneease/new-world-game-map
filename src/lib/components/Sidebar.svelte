@@ -4,8 +4,6 @@
 
 	import { DraggableGroup } from '$lib/components';
 
-	const dragImageMap = new Map<string, HTMLImageElement>();
-
 	function dragged(e) {
 		if ($state.value === 'idle') {
 			send({ type: 'DRAG_START', item: e.detail });

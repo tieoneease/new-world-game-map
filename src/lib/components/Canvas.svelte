@@ -3,7 +3,11 @@
 	export let send;
 
 	import { fabric } from 'fabric';
-	import { onMount } from 'svelte';
+	import { onMount, getContext } from 'svelte';
+	import { key as dbKey } from '$lib/db/gun';
+
+	const { getDb } = getContext(dbKey);
+	const db = getDb();
 
 	let _canvasWrapper: HTMLDivElement;
 	let _canvasElement: HTMLCanvasElement;
@@ -187,6 +191,7 @@
 
 	async function initCanvas(canvas: fabric.Canvas, canvasWrapper: HTMLDivElement) {
 		send({ type: 'ASSIGN_CANVAS', canvas });
+		canvas.hoverCursor = 'default';
 		resizeCanvas(canvas, canvasWrapper);
 
 		let mapGroup = await createTerritoryMap(Territory.Everfall);
