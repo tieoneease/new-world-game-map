@@ -51,7 +51,7 @@
 		<div class="menu">
 			<button
 				on:click={() => {
-					cereal = JSON.stringify($state.context.canvas);
+					cereal = JSON.stringify($state.context.canvas.toJSON(['selectable']));
 					console.log(cereal, null, 2);
 					localStorage.setItem('map', cereal);
 				}}
