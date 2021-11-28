@@ -19,3 +19,16 @@ https://www.figma.com/file/uQxkwOS0W4WxcQr7VgLfge/Untitled?node-id=0%3A1
 
 bugs:
     implement dragleave 
+
+
+
+
+
+Show object drags/moves in real time:
+    - don't serialize whole canvas per drag
+    - get delta drag?
+    - object on:move
+        - finding same object on another person's canvas
+            - find docs that show this event and its properties (mouse.x, mouse.y for example)
+            - how to retrieve same object in another canvas context (client-side)
+        - moving it accordingly

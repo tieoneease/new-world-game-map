@@ -28,6 +28,8 @@
 	];
 
 	let cereal = {};
+
+	const MAP_KEY = 'dummymap0';
 </script>
 
 <div id="sidebar" class="ui left fixed vertical menu">
@@ -55,13 +57,13 @@
 			<button
 				on:click={() => {
 					cereal = JSON.stringify($state.context.canvas.toJSON(['selectable']));
-					db.get('dummymap').put({ map: cereal });
+					db.get(MAP_KEY).put({ map: cereal });
 				}}
 				class="ui button">Serialize</button
 			>
 			<button
 				on:click={() => {
-					db.get('dummymap').once((object) => {
+					db.get(MAP_KEY).once((object) => {
 						cereal = object.map;
 						$state.context.canvas.loadFromJSON(cereal);
 					});

@@ -5,13 +5,51 @@
 	import { fabric } from 'fabric';
 	import { onMount, getContext } from 'svelte';
 	import { key as dbKey } from '$lib/db/gun';
+	import uuid from 'uuid/v4';
 
 	const { getDb } = getContext(dbKey);
 	const db = getDb();
 
+	const markersDb = db.get('dummymap0').get('markers');
+
 	let _canvasWrapper: HTMLDivElement;
 	let _canvasElement: HTMLCanvasElement;
 	let _canvas: fabric.Canvas;
+
+	function retrieveMarkerById(id) {
+		let object = undefined;
+		_canvas.getObjects().forEach((obj) => {
+			if (obj.id === id) object = obj;
+		});
+		return object;
+	}
+
+	function moveImage(marker: fabric.Object, config) {
+		const point = new fabric.Point(config.x, config.y);
+		marker.setPositionByOrigin(point, 'center', 'center');
+		marker.setCoords();
+		_canvas.renderAll();
+	}
+
+	function drawImageToMap({ id, x, y, imageUrl }) {
+		fabric.Image.fromURL(imageUrl, (image: fabric.Image, err: boolean) => {
+			if (err) console.error(err);
+
+			const point = new fabric.Point(x, y);
+			const invTrans = fabric.util.invertTransform(_canvas.viewportTransform);
+			const newPoint = fabric.util.transformPoint(point, invTrans);
+
+			image.set({
+				centeredScaling: true,
+				hasControls: false,
+				hasBorders: false
+			});
+			image.id = id;
+			image.setPositionByOrigin(newPoint, 'center', 'center');
+
+			_canvas.add(image);
+		});
+	}
 
 	interface MarkerConfig {
 		name: Marker;
@@ -167,25 +205,23 @@
 			}
 		});
 
+		canvas.on('object:moving', (event) => {
+			markersDb.get(event.target.id).put({ x: event.e.offsetX, y: event.e.offsetY });
+		});
+
 		canvas.on('drop', function (event) {
 			const x = event.e.offsetX;
 			const y = event.e.offsetY;
-			fabric.Image.fromURL($state.context.item.imageUrl, (image: fabric.Image, err: boolean) => {
-				if (err) console.error(err);
-
-				const point = new fabric.Point(x, y);
-				const invTrans = fabric.util.invertTransform(canvas.viewportTransform);
-				const newPoint = fabric.util.transformPoint(point, invTrans);
-
-				image.set({
-					centeredScaling: true,
-					hasControls: false,
-					hasBorders: false
-				});
-				image.setPositionByOrigin(newPoint, 'center', 'center');
-				canvas.add(image);
-			});
+			const imageUrl = $state.context.item.imageUrl;
 			send({ type: 'DROP', e: event });
+			// send x, y, image url to db
+			const id = uuid();
+			markersDb.get(id).put({
+				id,
+				x,
+				y,
+				imageUrl
+			});
 		});
 	}
 
@@ -213,6 +249,14 @@
 			backgroundColor: '#F3F3F3'
 		});
 		initCanvas(_canvas, _canvasWrapper);
+
+		markersDb.map().on((config, key) => {
+			// upon receive, do transform, place on canvas
+			if (!_canvas) return;
+			const marker = retrieveMarkerById(config.id);
+			if (marker) moveImage(marker, config);
+			else drawImageToMap(config);
+		});
 	});
 </script>
 
