@@ -24,6 +24,13 @@
 		return object;
 	}
 
+	function canvasToAbsolute(canvas, x, y) {
+		const point = new fabric.Point(x, y);
+		const invTrans = fabric.util.invertTransform(canvas.viewportTransform);
+		const newPoint = fabric.util.transformPoint(point, invTrans);
+		return { x: newPoint.x, y: newPoint.y };
+	}
+
 	function moveImage(marker: fabric.Object, config) {
 		const point = new fabric.Point(config.x, config.y);
 		marker.setPositionByOrigin(point, 'center', 'center');
@@ -35,18 +42,13 @@
 		fabric.Image.fromURL(imageUrl, (image: fabric.Image, err: boolean) => {
 			if (err) console.error(err);
 
-			const point = new fabric.Point(x, y);
-			const invTrans = fabric.util.invertTransform(_canvas.viewportTransform);
-			const newPoint = fabric.util.transformPoint(point, invTrans);
-
 			image.set({
 				centeredScaling: true,
 				hasControls: false,
 				hasBorders: false
 			});
 			image.id = id;
-			image.setPositionByOrigin(newPoint, 'center', 'center');
-
+			image.setPositionByOrigin(new fabric.Point(x, y), 'center', 'center');
 			_canvas.add(image);
 		});
 	}
@@ -206,20 +208,26 @@
 		});
 
 		canvas.on('object:moving', (event) => {
-			markersDb.get(event.target.id).put({ x: event.e.offsetX, y: event.e.offsetY });
+			const x = event.e.offsetX;
+			const y = event.e.offsetY;
+
+			const absolutePoint = canvasToAbsolute(canvas, x, y);
+			markersDb.get(event.target.id).put(absolutePoint);
 		});
 
 		canvas.on('drop', function (event) {
 			const x = event.e.offsetX;
 			const y = event.e.offsetY;
+
+			const absolutePoint = canvasToAbsolute(canvas, x, y);
 			const imageUrl = $state.context.item.imageUrl;
 			send({ type: 'DROP', e: event });
 			// send x, y, image url to db
 			const id = uuid();
 			markersDb.get(id).put({
 				id,
-				x,
-				y,
+				x: absolutePoint.x,
+				y: absolutePoint.y,
 				imageUrl
 			});
 		});
