@@ -1,5 +1,7 @@
 import Gun from 'gun/gun';
 
+const PEERS = ['https://nw-gun-relay.herokuapp.com/gun'];
+
 Gun.chain.subscribe = function (publish) {
 	let gun = this;
 	const at = gun._;
@@ -14,7 +16,6 @@ Gun.chain.subscribe = function (publish) {
 
 		gun = gun.on((data, key, event) => {
 			const _key = Gun.node.soul(data) || event.via.soul || key;
-
 			if (data === null) {
 				// Remove this if clause if you want to return null values
 				cache.delete(_key);
@@ -30,5 +31,5 @@ Gun.chain.subscribe = function (publish) {
 	return gun.off;
 };
 
-export const gun = Gun();
+export const gun = Gun({ peers: PEERS });
 export const key = {};

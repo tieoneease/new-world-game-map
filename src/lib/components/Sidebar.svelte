@@ -73,6 +73,4 @@
 </div>
 
 <style>
-	#sidebar {
-	}
 </style>
