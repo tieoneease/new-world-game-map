@@ -239,7 +239,7 @@
 		resizeCanvas(canvas, canvasWrapper);
 
 		let mapGroup = await createTerritoryMap(Territory.Everfall);
-		canvas.add(mapGroup);
+		canvas.setBackgroundImage(mapGroup);
 		canvas.centerObject(mapGroup);
 		setupCanvasEventHandlers(canvas);
 		canvas.zoomToPoint(
@@ -258,12 +258,12 @@
 		});
 		initCanvas(_canvas, _canvasWrapper);
 
-		markersDb.map().on((config, key) => {
+		markersDb.map().on((markerConfig, key) => {
 			// upon receive, do transform, place on canvas
 			if (!_canvas) return;
-			const marker = retrieveMarkerById(config.id);
-			if (marker) moveImage(marker, config);
-			else drawImageToMap(config);
+			const marker = retrieveMarkerById(markerConfig.id);
+			if (marker) moveImage(marker, markerConfig);
+			else drawImageToMap(markerConfig);
 		});
 	});
 </script>
