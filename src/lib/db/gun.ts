@@ -31,5 +31,10 @@ Gun.chain.subscribe = function (publish) {
 	return gun.off;
 };
 
+export enum DBKey {
+	Map = 'dummymap1',
+	MapMarkers = 'markers'
+}
+
 export const gun = Gun({ peers: PEERS });
 export const key = {};
