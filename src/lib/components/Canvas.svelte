@@ -208,6 +208,7 @@
 		});
 
 		canvas.on('object:moving', (event) => {
+			console.log(event.target.id);
 			const x = event.e.offsetX;
 			const y = event.e.offsetY;
 
@@ -240,7 +241,7 @@
 
 		let mapGroup = await createTerritoryMap(Territory.Everfall);
 		canvas.setBackgroundImage(mapGroup);
-		canvas.centerObject(mapGroup);
+		canvas.viewportCenterObject(mapGroup);
 		setupCanvasEventHandlers(canvas);
 		canvas.zoomToPoint(
 			new fabric.Point(canvas.width / 2, canvas.height / 2),
@@ -259,6 +260,7 @@
 		initCanvas(_canvas, _canvasWrapper);
 
 		markersDb.map().on((markerConfig, key) => {
+			console.log(markerConfig.id)
 			// upon receive, do transform, place on canvas
 			if (!_canvas) return;
 			const marker = retrieveMarkerById(markerConfig.id);
